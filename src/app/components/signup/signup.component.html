@@ -1,0 +1,28 @@
+<section class="signup">
+    <!-- <img src="images/signup-bg.jpg" alt=""> -->
+    <div class="container">
+        <div class="signup-content">
+            <form id="signup-form" class="signup-form">
+                <h2 class="form-title">Create account</h2>
+                <div class="form-group">
+                    <input type="text" class="form-input" name="name" #SUName placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-input" name="email" #SUMail placeholder="Your Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" name="password" #SUPassword placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" name="re_password" #SUPassword2 placeholder="Repeat your password">
+                </div>
+                <div class="" role="alert" [ngClass]="info.disable ? 'd-none':'form-group '+info.className">
+                    <span id="passwordcheck">{{info.text}}</span>
+                </div>
+                <div class="form-group">
+                    <input type="button" name="submit" (click)="signup(SUName.value,SUMail.value,SUPassword.value,SUPassword2.value)" class="btn btn-primary form-submit" value="Sign up">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

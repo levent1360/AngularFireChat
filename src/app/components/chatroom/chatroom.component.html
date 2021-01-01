@@ -1,0 +1,93 @@
+<div class="col-xl-12 col-lg-12 d-flex mt-4">
+    <div class="row col-md-3">
+        <div class="card w-100">
+            <div class="card-header py-3 ">
+                <h6 class="m-0 font-weight-bold text-primary">Kişiler</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group" *ngFor="let kisi of kisiler">
+                    <a (click)="kisiSec(kisi)" routerLink="/chatroom" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{kisi.UserName}}</h5>
+                            <small class="isOnline"></small>
+                        </div>
+                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row col-md-8 ml-1" *ngIf="kisisec!=''">
+        <!-- chat start -->
+        <!-- Page header end -->
+        <!-- Content wrapper start -->
+        <div class="bootstrap w-100 snippets bootdeys">
+            <div class="col-md-12 col-xs-12 col-md-offset-2">
+                <!-- Panel Chat -->
+                <div class="panel" id="chat">
+                    <div class="panel-heading">
+                        <div class="panel-title d-flex">
+                            <i class="icon wb-chat-text" aria-hidden="true"></i>
+                            <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
+                                <i></i>
+                            </a>
+                            <div class="MessageTo d-block">
+                                <div class="ToName">{{kisisec.UserName}}</div>
+                                <div class="ToStatus">Çevrimiçi</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="panel-body scroll" #scroll [scrollTop]="scroll.scrollHeight">
+                        <div class="chats" *ngFor="let msg of messages">
+                            <div class="chat">
+                                <div class="chat-avatar">
+                                    <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
+                                        <i></i>
+                                    </a>
+                                </div>
+                                <div class="chat-body">
+                                    <div class="chat-content">
+                                        <p>{{msg.MessageText}}</p>
+                                        <time class="chat-time" datetime="2015-07-01T11:37">{{msg.MessageTime | date:"dd/MM/yyyy HH:mm:ss"}}</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <form>
+                            <div class="input-group">
+                                <input type="text" class="form-control" #message placeholder="Enter your message" (keydown.enter)="createMessage(message.value,$event);message.value=''">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" (click)="createMessage(message.value,$event);message.value=''">Send</button>
+                                  </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- End Panel Chat -->
+            </div>
+        </div>
+        <!-- Content wrapper end -->
+        <!-- chat end -->
+        <!-- <div class="card w-100">
+            <!-- Card Header - Dropdown -->
+        <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Mesajlaşma</h6>
+            </div>
+            Card Body -->
+        <!-- <div class="card-body d-flex">
+
+            </div>
+        </div>
+    </div> -->
+
+    </div>
+
+
+
+    <!---->
