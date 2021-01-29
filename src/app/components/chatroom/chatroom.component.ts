@@ -18,7 +18,7 @@ export class ChatroomComponent implements OnInit {
   kisisec: any = "";
   girisKullanici: any;
   isOwnMessage = true;
-  girisKisi: string;
+  girisKisi: FirebaseUser[];
   uid: string
   key: string
 
@@ -35,8 +35,10 @@ export class ChatroomComponent implements OnInit {
     this.kisiListele();
     this.girisKontrol();
     this.scrollToBottom();
-    console.log(JSON.parse(localStorage.getItem('user')).user.email)
+    JSON.parse(localStorage.getItem('user')).user.email
     this.uid = JSON.parse(localStorage.getItem('uid'))
+    this.KisiListeleByUid()
+    console.log(this.girisKisi)
   }
 
 
@@ -111,5 +113,14 @@ export class ChatroomComponent implements OnInit {
     }
   }
 
+  KisiListeleByUid() {
+    this.service.getUserByUid(this.uid).snapshotChanges().subscribe(data => {
+      this.girisKisi = [];
+      data.forEach(satir => {
+        const y = { ...satir.payload.toJSON(), key: satir.key };
+        this.girisKisi.push(y as FirebaseUser);
+      });
+    });
+  }
 
 }
