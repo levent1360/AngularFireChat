@@ -1,5 +1,5 @@
 <div class="col-xl-12 col-lg-12 d-flex mt-4">
-    <div class="row col-md-3">
+    <div class="row col-md-3 col-xs-2">
         <div class="card w-100">
             <div class="card-header py-3 ">
                 <h6 class="m-0 font-weight-bold text-primary">Kişiler</h6>
@@ -33,16 +33,31 @@
                                 <i></i>
                             </a>
                             <div class="MessageTo d-block">
-                                <div class="ToName">{{kisisec.UserName}}</div>
+                                <div class="ToName">{{kisisec.UserName}} - {{kisisec.UserMail}}</div>
                                 <div class="ToStatus">Çevrimiçi</div>
                             </div>
 
                         </div>
 
                     </div>
-                    <div class="panel-body scroll" #scroll [scrollTop]="scroll.scrollHeight">
-                        <div class="chats" *ngFor="let msg of messages">
-                            <div class="chat">
+                    <div class="panel-body scroll" style="height:480px;width:100%;overflow-y:auto" (scroll)="scroll.scrollHeight" #scroll>
+                        <div class="chats" *ngFor="let msg of messages" #messages>
+                            <div class="chat chat-left" *ngIf="msg.MessageSender!=girisKisi">
+                                <div class="chat-avatar">
+                                    <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
+                                        <i></i>
+                                    </a>
+                                </div>
+                                <div class="chat-body">
+                                    <div class="chat-content">
+                                        <h6>{{msg.MessageSender}}</h6>
+                                        <p>{{msg.MessageText}}</p>
+                                        <time class="chat-time" datetime="2015-07-01T11:37">{{msg.MessageTime | date:"dd/MM/yyyy HH:mm:ss"}}</time>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat" *ngIf="msg.MessageSender==girisKisi">
                                 <div class="chat-avatar">
                                     <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
                                         <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
@@ -75,7 +90,7 @@
         <!-- Content wrapper end -->
         <!-- chat end -->
         <!-- <div class="card w-100">
-            <!-- Card Header - Dropdown -->
+            Card Header - Dropdown -->
         <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Mesajlaşma</h6>
             </div>

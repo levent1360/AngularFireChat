@@ -4,6 +4,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { FirebaseUser } from 'src/app/modules/firebase/firebase.module';
 import { map } from 'rxjs/operators';
 import { warning } from 'src/app/modules/info.module';
+import { JsonPipe } from '@angular/common';
 
 
 @Component({
@@ -12,34 +13,38 @@ import { warning } from 'src/app/modules/info.module';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-public loginName="";
+  public loginName = "";
 
-  public info= new warning(true,"","");
-  user:FirebaseUser=new FirebaseUser()
-  users:any
-  constructor(public service: FirebaseService, public router:Router) { }
+  public info = new warning(true, "", "");
+  user: FirebaseUser = new FirebaseUser()
+  userGiris1: any;
+  userGiris: FirebaseUser[]
+  users: any;
+  uid: string;
+  constructor(public service: FirebaseService, public router: Router) { }
 
 
   ngOnInit() {
-     }
+    this.getUSers();
+  }
 
   login(email, password) {
     if (email === "" || password === "") {
-      this.info=new warning(false,"Boş alanları doldurunuz.","alert alert-danger");      
+      this.info = new warning(false, "Boş alanları doldurunuz.", "alert alert-danger");
       return this.info;
     }
     else {
-      this.service.Login(email,password).then(user=>{
-        console.log(user)
-        localStorage.setItem('user', JSON.stringify(user));
-        this.router.navigate(['/chatroom']);
-        this.info=new warning(false,"Kullanıcı adı ve parola Başarılı.","alert alert-success");  
-        return this.info;
-      }).catch(err=>{
-        console.log(err)
-        this.info=new warning(false,"Kullanıcı adı veya parola yanlış.","alert alert-danger");      
-        return this.info;
-      })
+      this.service.Login(email, password)
+        .then(u => {
+          localStorage.setItem('user', JSON.stringify(u));
+          localStorage.setItem('uid',JSON.stringify(u.user.uid))
+          this.router.navigate(['/chatroom']);
+        })
+        .catch(err => {
+          console.log(err)
+          this.info = new warning(false, "Kullanıcı adı veya parola yanlış.", "alert alert-danger");
+          return this.info;
+        })
     }
 
   }

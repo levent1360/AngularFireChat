@@ -15,23 +15,28 @@ export class FirebaseService {
   private dbPathUserType = '/UserType';
   private dbPathRooms = '/ChatRooms';
   private dbPathMessages = '/Messages';
-  user:FirebaseUser=new FirebaseUser();
+  user: FirebaseUser = new FirebaseUser();
 
   UsersRef: AngularFireList<FirebaseUser> = null;
   TypeRef: AngularFireList<UserTypes> = null;
 
-  constructor(public db: AngularFireDatabase, private firebaseAuth: AngularFireAuth) { }
+  constructor(public db: AngularFireDatabase, private firebaseAuth: AngularFireAuth) {this.UsersRef=db.list(this.dbPathUser) }
 
   createUser(user) {
     return this.getUSer().push(user);
   }
-
-  formSignUp(email:string, password:string) {
+  UpdateUser(user:FirebaseUser) {
+    return this. getUSer().update(user.key, user)
+  }
+  formSignUp(email: string, password: string) {
     return this.firebaseAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  Login(email:string,password:string){
-    return this.firebaseAuth.signInWithEmailAndPassword(email,password)
+  Login(email: string, password: string) {
+    return this.firebaseAuth.signInWithEmailAndPassword(email, password)
+  }
+  LogOut() {
+    return this.firebaseAuth.signOut();
   }
   createUserType(id, name) {
     const Tref = this.TypeRef.push({
@@ -43,6 +48,10 @@ export class FirebaseService {
 
   getUSer(): AngularFireList<FirebaseUser> {
     return this.db.list(this.dbPathUser);
+  }
+
+  getUserByUid(uid:string){
+    return this.db.list(this.dbPathUser, q=> q.orderByChild('Uid').equalTo(uid));
   }
   getTypes(): AngularFireList<UserTypes> {
     return this.db.list(this.dbPathUserType);

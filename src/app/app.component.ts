@@ -3,7 +3,7 @@ import { LoginComponent } from './components/login/login.component';
 import { FirebaseUser, UserTypes } from './modules/firebase/firebase.module';
 import { FirebaseService } from './services/firebase.service';
 import { Component, OnInit } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, Router } from '@angular/router';
 
 
 
@@ -13,20 +13,28 @@ import { Routes, RouterModule } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-loginName;
+  loginName;
   title = 'AngFireChatApp';
-  constructor() { }
+  constructor(public service: FirebaseService, public router: Router) { }
   ngOnInit(): void {
-  this.isLoggin();
+    this.isLoggin();
   }
 
-  isLoggin(){
-    if(localStorage.getItem('user')){
-      this.loginName=JSON.parse(localStorage.getItem('user')).user.email;
+  isLoggin() {
+    if (localStorage.getItem('user')) {
+      this.loginName = JSON.parse(localStorage.getItem('user')).user.email;
 
-    }else{
-      this.loginName="";
+    } else {
+      this.loginName = "";
     }
+  }
+
+  LogOut() {
+    this.service.LogOut().then(() => {
+      localStorage.removeItem('user');
+      localStorage.removeItem('uid');
+      this.router.navigate(['/login'])
+    });
   }
 
 

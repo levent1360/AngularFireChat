@@ -30,14 +30,16 @@ export class SignupComponent implements OnInit {
       }
       else {
         this.service.formSignUp(email, password).then(u => {
+          u.user.updateProfile({displayName:name})
           this.user.Uid=u.user.uid;
           this.user.UserName=name;
           this.user.UserMail=u.user.email;
-          // this.user.UserName=u.user.displayName;
-          this.user.UserCdate=u.user.metadata.creationTime;
-          // this.user.UserLastDate=u.user.metadata.lastSignInTime.toString();
-          // this.user.UserUDate=u.user.metadata.creationTime.toString();
-          this.user.UserType="Üye"
+          this.user.UserCdate=u.user.metadata.creationTime.toString();
+          this.user.UserLastDate=u.user.metadata.lastSignInTime;
+          this.user.UserUDate=u.user.metadata.creationTime;
+          this.user.UserType="Üye";
+          this.user.UserStatus=false;
+          console.log(this.user)
           this.service.createUser(this.user);
           setTimeout(() => {
             this.router.navigateByUrl('/login');

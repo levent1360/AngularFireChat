@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ChatRooms, FirebaseUser, Messages } from 'src/app/modules/firebase/firebase.module';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -14,14 +15,48 @@ export class ChatroomComponent implements OnInit {
   mesaj: Messages = new Messages();
   messages: any[];
   kisiler: FirebaseUser[];
-  kisisec:any="";
+  kisisec: any = "";
+  girisKullanici: any;
+  isOwnMessage = true;
+  girisKisi: string;
+  uid: string
+  key: string
+
+
+  @ViewChildren('messages') mes: QueryList<any>;
+  @ViewChild('scroll') content: ElementRef;
+
+
   constructor(public service: FirebaseService) { }
+
+
+  ngOnInit() {
+    this.getMessages();
+    this.kisiListele();
+    this.girisKontrol();
+    this.scrollToBottom();
+    console.log(JSON.parse(localStorage.getItem('user')).user.email)
+    this.uid = JSON.parse(localStorage.getItem('uid'))
+  }
+
+
+  ngAfterViewInit() {
+    this.scrollToBottom();
+    this.mes.changes.subscribe(this.scrollToBottom);
+  }
+
+  scrollToBottom = () => {
+    try {
+      this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
+
 
   createMessage(text, e) {
     e.preventDefault();
     this.mesaj.MessageText = text;
     this.mesaj.MessageTime = this.getDate();
-    this.mesaj.MessageTo = this.kisisec.UserName;
+    this.mesaj.MessageTo = this.kisisec.UserMail;
     this.mesaj.MessageSender = JSON.parse(localStorage.getItem('user')).user.email
     this.room.RoomName = this.mesaj.MessageTo + " - " + this.mesaj.MessageSender;
     if (text !== "") {
@@ -54,13 +89,27 @@ export class ChatroomComponent implements OnInit {
         });
   }
 
-  ngOnInit() {
-    this.getMessages();
-    this.kisiListele();
+
+  kisiSec(k: FirebaseUser) {
+    console.log(k.UserMail)
+    this.senderControl(k.UserMail);
+    this.girisKontrol();
+    return this.kisisec = k;
   }
 
-  kisiSec(k:FirebaseUser){
-    return this.kisisec=k;
+  girisKontrol() {
+    return this.girisKisi = JSON.parse(localStorage.getItem('user')).user.email;
+
   }
+
+  senderControl(k: string) {
+    if (JSON.parse(localStorage.getItem('user')).user.email == k) {
+      this.isOwnMessage = true;
+    }
+    else {
+      this.isOwnMessage = false;
+    }
+  }
+
 
 }

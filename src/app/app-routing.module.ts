@@ -6,12 +6,24 @@ import { UserComponent } from './components/user/user.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+
+const redirectLogin = () => redirectUnauthorizedTo(['login']);
+
 const routes: Routes = [
   {path:'', component:HomeComponent},
-  {path:'chatroom', component:ChatroomComponent},
+  {path:'chatroom', component:ChatroomComponent,
+  canActivate: [AngularFireAuthGuard],
+  data: {
+    authGuardPipe: redirectLogin
+  }},
   {path:'signup', component:SignupComponent},
   {path:'login', component:LoginComponent},
-  {path:'user', component:UserComponent}
+  {path:'user', component:UserComponent, 
+  canActivate: [AngularFireAuthGuard],
+  data: {
+    authGuardPipe: redirectLogin
+  }}
 ];
 
 @NgModule({
